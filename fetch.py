@@ -24,5 +24,5 @@ def get_upcoming_earnings():
         print("FMP error:", data)
         return pd.DataFrame()
 
-    print(f"✓ Upcoming earnings: {len(data)} companies")
+    print(f"Upcoming earnings: {len(data)} companies")
     return pd.DataFrame(data)
