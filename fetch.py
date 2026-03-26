@@ -1,40 +1,28 @@
-# fetch.py
 import requests
 import pandas as pd
-import time
+from datetime import datetime, timedelta
+from dotenv import load_dotenv
+import os
 
-FMP_KEY = ""
-AV_KEY  = ""        
+load_dotenv()
+FMP_KEY = os.getenv("FMP_KEY")
+AV_KEY  = os.getenv("AV_KEY")
 
-# Get upcoming earnings dates 
-def fetch_upcoming_earnings():
-    url = f"https://financialmodelingprep.com/api/v3/earning_calendar?apikey={FMP_KEY}"
-    response = requests.get(url)          
-    data = response.json()                
-    df = pd.DataFrame(data)              
-    return df
 
-# Get historical EPS surprises for ONE company 
-def fetch_eps_history(ticker):
-    url = f"https://financialmodelingprep.com/api/v3/earnings-surprises/{ticker}?apikey={FMP_KEY}"
-    response = requests.get(url)
-    data = response.json()
-    df = pd.DataFrame(data)
-    return df
+def get_upcoming_earnings():
+    today    = datetime.today().strftime("%Y-%m-%d")
+    in2weeks = (datetime.today() + timedelta(days=14)).strftime("%Y-%m-%d")
 
-#  FUNCTION 3: Get post-earnings price reaction 
-def fetch_price_after_earnings(ticker):
-    url = (
-        f"https://www.alphavantage.co/query"
-        f"?function=TIME_SERIES_DAILY&symbol={ticker}"
-        f"&outputsize=compact&apikey={AV_KEY}"
+    r    = requests.get(
+        "https://financialmodelingprep.com/stable/earnings-calendar",
+        params={"from": today, "to": in2weeks, "apikey": FMP_KEY},
+        timeout=10
     )
-    response = requests.get(url)
-    data = response.json()
+    data = r.json()
 
-    prices = data.get("Time Series (Daily)", {})
-    df = pd.DataFrame(prices).T          
-    df.index = pd.to_datetime(df.index)  
-    df.columns = ["open", "high", "low", "close", "volume"]
-    df = df.astype(float)                
-    return df
+    if isinstance(data, dict):
+        print("FMP error:", data)
+        return pd.DataFrame()
+
+    print(f"✓ Upcoming earnings: {len(data)} companies")
+    return pd.DataFrame(data)
