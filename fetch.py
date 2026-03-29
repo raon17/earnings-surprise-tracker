@@ -53,3 +53,29 @@ def get_quarterly_financials(ticker):
 
     print(f"Quarterly financials for {ticker}: {len(out)} quarters")
     return out
+
+def get_upcoming_earnings():
+    """Upcoming earnings calendar from FMP"""
+    today    = datetime.today().strftime("%Y-%m-%d")
+    in2weeks = (datetime.today() + timedelta(days=14)).strftime("%Y-%m-%d")
+ 
+    r = requests.get(
+        "https://financialmodelingprep.com/stable/earnings-calendar",
+        params={"from": today, "to": in2weeks, "apikey": FMP_KEY},
+        timeout=10
+    )
+    data = r.json()
+ 
+    if isinstance(data, dict):
+        print("FMP error:", data)
+        return pd.DataFrame()
+ 
+    print(f"Upcoming earnings: {len(data)} companies")
+    return pd.DataFrame(data)
+ 
+ 
+if __name__ == "__main__":
+    print("\n=== Testing fetch.py ===\n")
+    print(get_company_info("NVDA"))
+    print(get_quarterly_financials("NVDA").head())
+    print(get_upcoming_earnings().head())
