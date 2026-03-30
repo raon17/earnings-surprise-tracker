@@ -24,9 +24,7 @@ def add_surprise(df):
         df["surprise_pct"] = (df["surprise_pct_raw"] * 100).round(2)
     elif "eps" in df.columns and "epsEstimated" in df.columns:
         df = df[df["epsEstimated"] != 0].reset_index(drop=True)
-        df["surprise_pct"] = (
-            (df["eps"] - df["epsEstimated"]) / df["epsEstimated"].abs() * 100
-        ).round(2)
+        df["surprise_pct"] = ( (df["eps"] - df["epsEstimated"]) / df["epsEstimated"].abs() * 100  ).round(2)
     else:
         return df
  
