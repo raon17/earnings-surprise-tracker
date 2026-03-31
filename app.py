@@ -33,3 +33,9 @@ info, fin_df, eps_df, cal_df = load_all(ticker)
 if fin_df.empty:
     st.error(f"No data for **{ticker}**. Try AAPL, MSFT, NVDA or TSLA.")
     st.stop()
+
+
+# HEADER
+st.title(f"{info['name']}  ({ticker})")
+st.caption(f"{info['sector']}   *Market cap: {(info['market_cap'])}  *Data via yfinance")
+st.divider()
