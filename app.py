@@ -34,8 +34,14 @@ if fin_df.empty:
     st.error(f"No data for **{ticker}**. Try AAPL, MSFT, NVDA or TSLA.")
     st.stop()
 
+# Format large numbers
+def fmt(n):
+    if pd.isna(n):   return "—"
+    if n >= 1e9:     return f"${n/1e9:.1f}B"
+    if n >= 1e6:     return f"${n/1e6:.1f}M"
+    return f"${n:.2f}"
 
 # HEADER
 st.title(f"{info['name']}  ({ticker})")
-st.caption(f"{info['sector']}   *Market cap: {(info['market_cap'])}  *Data via yfinance")
+st.caption(f"{info['sector']}  Market cap: {fmt(info['market_cap'])}  Data via yfinance")
 st.divider()
