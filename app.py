@@ -55,3 +55,14 @@ def delta(col):
     val = latest.get(f"{col}_qoq")
     if pd.isna(val): return None
     return f"{val:+.1f}% QoQ"
+
+c1, c2, c3, c4 = st.columns(4)
+c1.metric("Revenue",    fmt(latest.get("revenue")),    delta("revenue"))
+c2.metric("Net Income", fmt(latest.get("net_income")), delta("net_income"))
+c3.metric("EPS",        f"${latest.get('eps', 0):.2f}", delta("eps"))
+
+# Beat streak from eps_df
+streak = beat_streak(eps_df) if not eps_df.empty else 0
+c4.metric("Beat streak", f"{streak} qtrs", "in a row" if streak > 1 else "")
+
+st.divider()
