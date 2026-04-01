@@ -43,5 +43,15 @@ def fmt(n):
 
 # HEADER
 st.title(f"{info['name']}  ({ticker})")
-st.caption(f"{info['sector']}  Market cap: {fmt(info['market_cap'])}  Data via yfinance")
+st.caption(f"{info['sector']}  | Market cap: {fmt(info['market_cap'])} ")
 st.divider()
+
+# KPI CARDS 
+
+latest = fin_df.iloc[-1]
+prev   = fin_df.iloc[-2] if len(fin_df) > 1 else latest
+
+def delta(col):
+    val = latest.get(f"{col}_qoq")
+    if pd.isna(val): return None
+    return f"{val:+.1f}% QoQ"
