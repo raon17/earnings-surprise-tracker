@@ -66,3 +66,15 @@ streak = beat_streak(eps_df) if not eps_df.empty else 0
 c4.metric("Beat streak", f"{streak} qtrs", "in a row" if streak > 1 else "")
 
 st.divider()
+
+# DATE FILTER
+min_date = fin_df["date"].min().date()
+max_date = fin_df["date"].max().date()
+
+col_p, col_s, col_e = st.columns([1,1,1])
+with col_p:
+    preset = st.selectbox("Range", ["All time", "Custom"], index=0)
+with col_s:
+    start_date = st.date_input("Start", value=min_date, min_value=min_date, max_value=max_date)
+with col_e:
+    end_date   = st.date_input("End",   value=max_date, min_value=min_date, max_value=max_date)
