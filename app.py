@@ -78,3 +78,8 @@ with col_s:
     start_date = st.date_input("Start", value=min_date, min_value=min_date, max_value=max_date)
 with col_e:
     end_date   = st.date_input("End",   value=max_date, min_value=min_date, max_value=max_date)
+if preset == "All time":
+    start_date, end_date = min_date, max_date
+
+mask = (fin_df["date"] >= pd.Timestamp(start_date)) & (fin_df["date"] <= pd.Timestamp(end_date))
+filtered = fin_df[mask].copy()
