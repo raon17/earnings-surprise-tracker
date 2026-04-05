@@ -123,5 +123,26 @@ fig_rev.update_layout(
 st.plotly_chart(fig_rev, use_container_width=True)
 st.divider()
 
-st.plotly_chart(fig_rev, use_container_width=True)
-st.divider()
+# EPS CHART+SURPRISE —
+with col_eps:
+    st.subheader("EPS over time")
+
+    fig_eps = go.Figure()
+    fig_eps.add_trace(go.Bar(
+        x    = filtered["date"],
+        y    = filtered["eps"],
+        name = "EPS",
+        marker_color = "#1D9E75",
+        text = filtered["eps"].apply(lambda x: f"${x:.2f}" if not pd.isna(x) else ""),
+        textposition = "outside",
+    ))
+    if "eps_qoq" in filtered.columns:
+        fig_eps.add_trace(go.Scatter(
+            x    = filtered["date"],
+            y    = filtered["eps_qoq"],
+            name = "QoQ %",
+            mode = "lines+markers",
+            line = dict(color="#EF9F27", width=2),
+            yaxis = "y2",
+        ))
+
