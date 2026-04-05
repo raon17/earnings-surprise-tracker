@@ -111,3 +111,17 @@ if "revenue_qoq" in filtered.columns:
     ))
 
 
+fig_rev.update_layout(
+    yaxis  = dict(title="Revenue ($)", tickformat=".2s"),
+    yaxis2 = dict(title="QoQ %", overlaying="y", side="right", showgrid=False),
+    plot_bgcolor  = "rgba(0,0,0,0)",
+    paper_bgcolor = "rgba(0,0,0,0)",
+    legend = dict(orientation="h", y=1.1),
+    hovermode = "x unified",
+    bargap = 0.3,
+)
+st.plotly_chart(fig_rev, use_container_width=True)
+st.divider()
+
+st.plotly_chart(fig_rev, use_container_width=True)
+st.divider()
