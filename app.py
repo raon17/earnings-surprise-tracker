@@ -49,7 +49,7 @@ st.divider()
 # KPI CARDS 
 
 latest = fin_df.iloc[-1]
-prev   = fin_df.iloc[-2] if len(fin_df) > 1 else latest
+prev = fin_df.iloc[-2] if len(fin_df) > 1 else latest
 
 def delta(col):
     val = latest.get(f"{col}_qoq")
@@ -83,3 +83,31 @@ if preset == "All time":
 
 mask = (fin_df["date"] >= pd.Timestamp(start_date)) & (fin_df["date"] <= pd.Timestamp(end_date))
 filtered = fin_df[mask].copy()
+
+st.caption(f"Showing {len(filtered)} quarters  ·  {start_date.strftime('%b %Y')} → {end_date.strftime('%b %Y')}")
+st.divider()
+
+# Revenue chart with QoQ growth line
+st.subheader("Revenue")
+
+fig_rev = go.Figure()
+fig_rev.add_trace(go.Bar(
+    x    = filtered["date"],
+    y    = filtered["revenue"],
+    name = "Revenue",
+    marker_color = "#378ADD",
+    text = filtered["revenue"].apply(lambda x: fmt(x)),
+    textposition = "outside",
+))
+# QoQ growth line on secondary axis
+if "revenue_qoq" in filtered.columns:
+    fig_rev.add_trace(go.Scatter(
+        x    = filtered["date"],
+        y    = filtered["revenue_qoq"],
+        name = "QoQ growth %",
+        mode = "lines+markers",
+        line = dict(color="#EF9F27", width=2),
+        yaxis = "y2",
+    ))
+
+
