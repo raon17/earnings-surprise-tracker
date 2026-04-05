@@ -145,4 +145,14 @@ with col_eps:
             line = dict(color="#EF9F27", width=2),
             yaxis = "y2",
         ))
+    fig_eps.update_layout(
+        yaxis  = dict(title="EPS ($)"),
+        yaxis2 = dict(title="QoQ %", overlaying="y", side="right", showgrid=False),
+        plot_bgcolor  = "rgba(0,0,0,0)",
+        paper_bgcolor = "rgba(0,0,0,0)",
+        legend = dict(orientation="h", y=1.1),
+        hovermode = "x unified",
+        bargap = 0.3,
+    )
+    st.plotly_chart(fig_eps, use_container_width=True)
 
