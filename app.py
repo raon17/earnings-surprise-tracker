@@ -191,3 +191,22 @@ with col_surp:
             showlegend = False,
             hovermode  = "x",
         )
+
+        st.plotly_chart(fig_surp, use_container_width=True)
+
+
+        latest_surp = eps_df.iloc[0]
+        beat_miss   = latest_surp.get("result", "—").upper()
+        surp_pct    = latest_surp.get("surprise_pct", 0)
+        act_eps     = latest_surp.get("eps", 0)
+        est_eps     = latest_surp.get("epsEstimated", 0)
+        diff        = act_eps - est_eps if act_eps and est_eps else 0
+        color       = "green" if beat_miss == "BEAT" else "red"
+
+        st.markdown(f"""
+        **Latest quarter**
+        > EPS: **${act_eps:.2f}** vs est **${est_eps:.2f}**
+        > :{color}[{beat_miss} by {diff:+.2f} ({surp_pct:+.1f}%)]
+        """)
+
+st.divider()
