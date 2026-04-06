@@ -174,3 +174,20 @@ with col_surp:
             "inline":  "#2196F3",
             "unknown": "#9E9E9E",
         })
+
+        fig_surp = go.Figure()
+        fig_surp.add_trace(go.Bar(
+            x    = surp_df["date"].dt.strftime("%b %Y"),
+            y    = surp_df["surprise_pct"],
+            marker_color = colors,
+            text = surp_df["surprise_pct"].apply(lambda x: f"{x:+.1f}%"),
+            textposition = "outside",
+        ))
+        fig_surp.add_hline(y=0, line_dash="dash", line_color="gray", opacity=0.4)
+        fig_surp.update_layout(
+            yaxis = dict(title="Surprise %"),
+            plot_bgcolor  = "rgba(0,0,0,0)",
+            paper_bgcolor = "rgba(0,0,0,0)",
+            showlegend = False,
+            hovermode  = "x",
+        )
