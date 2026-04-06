@@ -36,9 +36,9 @@ if fin_df.empty:
 
 # Format large numbers
 def fmt(n):
-    if pd.isna(n):   return "—"
-    if n >= 1e9:     return f"${n/1e9:.1f}B"
-    if n >= 1e6:     return f"${n/1e6:.1f}M"
+    if pd.isna(n): return "—"
+    if n >= 1e9: return f"${n/1e9:.1f}B"
+    if n >= 1e6: return f"${n/1e6:.1f}M"
     return f"${n:.2f}"
 
 # HEADER
@@ -77,7 +77,7 @@ with col_p:
 with col_s:
     start_date = st.date_input("Start", value=min_date, min_value=min_date, max_value=max_date)
 with col_e:
-    end_date   = st.date_input("End",   value=max_date, min_value=min_date, max_value=max_date)
+    end_date = st.date_input("End",   value=max_date, min_value=min_date, max_value=max_date)
 if preset == "All time":
     start_date, end_date = min_date, max_date
 
@@ -123,7 +123,9 @@ fig_rev.update_layout(
 st.plotly_chart(fig_rev, use_container_width=True)
 st.divider()
 
-# EPS CHART+SURPRISE —
+col_eps, col_surp = st.columns([3, 2])
+
+# EPS CHART+SURPRISE 
 with col_eps:
     st.subheader("EPS over time")
 
@@ -156,3 +158,19 @@ with col_eps:
     )
     st.plotly_chart(fig_eps, use_container_width=True)
 
+# Surprise
+with col_surp:
+    st.subheader("EPS surprise")
+
+    if eps_df.empty or "surprise_pct" not in eps_df.columns:
+        st.info("No surprise data available.")
+    else:
+        # Show last 6 quarters of surprise data
+        surp_df = eps_df.head(6).sort_values("date", ascending=True)
+
+        colors = surp_df["result"].map({
+            "beat":    "#4CAF50",
+            "miss":    "#F44336",
+            "inline":  "#2196F3",
+            "unknown": "#9E9E9E",
+        })
