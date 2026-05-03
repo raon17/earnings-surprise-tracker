@@ -23,17 +23,23 @@ def save_to_db(df):
     df.columns = ["ticker", "report_date", "eps_estimate", "eps_actual"]
     df.to_sql("earnings", engine, if_exists="append", index=False)
 
-if __name__ == "__main__":
-    all_earnings = []
-    for ticker in TICKERS:
-        earnings = fetch_earnings(ticker)
-        if earnings is not None:
-            all_earnings.append(earnings)
 
-    if all_earnings:
-        combined_df = pd.concat(all_earnings, ignore_index=True)
-        save_to_db(combined_df)
-        print("Earnings data saved to database.")
-    else:
-        print("No earnings data found.")
-        
+while True:
+    for t in TICKERS:
+        df = fetch_earnings(t)
+        if df is not None:
+            save_to_db(df)
+
+    print("Updated...")
+    time.sleep(3600)
+
+
+if __name__ == "__main__":
+    while True:
+        for t in TICKERS:
+            df = fetch_earnings(t)
+            if df is not None:
+                save_to_db(df)
+
+        print("Updated...")
+        time.sleep(3600)
